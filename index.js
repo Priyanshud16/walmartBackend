@@ -1,24 +1,27 @@
-const  express=require("express")
-const ConnectDB = require("./config/db")
-const userRouter = require("./Routes/UserRouter")
+const express = require("express");
+const cors = require("cors"); // Import the cors middleware
+const ConnectDB = require("./config/db");
+const userRouter = require("./Routes/UserRouter");
 
+const dotenv = require("dotenv").config();
+const app = express();
 
-const dotenv=require("dotenv").config()
-const app=express()
+app.use(express.json());
 
-app.use(express.json())
-app.use("/user",userRouter)
+// Use the CORS middleware
+app.use(cors());
 
-app.get("/",(req,res)=>{
-res.send("This is our Home Route")
-})
+app.use("/user", userRouter);
 
-app.listen(process.env.PORT,async()=>{
-    try {
-    await ConnectDB
-        console.log("server is running and DB is Connected");
-    } catch (error) {
-        
-    }
-   
-})
+app.get("/", (req, res) => {
+  res.send("This is our Home Route");
+});
+
+app.listen(process.env.PORT, async () => {
+  try {
+    await ConnectDB;
+    console.log("server is running and DB is Connected");
+  } catch (error) {
+    console.error("Error occurred while connecting to DB:", error);
+  }
+});
